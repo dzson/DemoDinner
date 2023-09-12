@@ -43,12 +43,12 @@ public class AuthenticationService : IAuthenticationService
     {
         if (_userRepository.GetUserByEmail(email) is not User user)
         {
-            throw new Exception("Wrong email or password");
+            throw new Exception("User with given email does not exists.");
         }
 
         if (user.Password != password)
         {
-            throw new Exception("Wrong email or password");
+            throw new Exception("Invalid password.");
         }
 
         string token = _jwtTokenGenerator.GenerateToken(user);
