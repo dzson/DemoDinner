@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 namespace DemoDinner.Api.Filters;
 
@@ -9,13 +10,14 @@ public class ErrorHandlingFilterAttribute : ExceptionFilterAttribute
     {
         Exception exception = context.Exception;
 
-        var errorResult = new { error = "An error occured while processing your request." };
-
-        context.Result = new ObjectResult(errorResult)
+        ProblemDetails problemDetails = new()
         {
-            StatusCode = 500
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+            Title = "An error occured while processing your request.",
+            Status = (int)HttpStatusCode.InternalServerError
         };
 
+        context.Result = new ObjectResult(problemDetails);
         context.ExceptionHandled = true;
     }
 }
