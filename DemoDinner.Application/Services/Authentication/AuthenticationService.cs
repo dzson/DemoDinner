@@ -1,6 +1,8 @@
 ﻿using DemoDinner.Application.Common.Interfaces.Authentication;
 using DemoDinner.Application.Common.Interfaces.Persistence;
+using DemoDinner.Domain.Common.Errors;
 using DemoDinner.Domain.Entities;
+using ErrorOr;
 
 namespace DemoDinner.Application.Services.Authentication;
 
@@ -15,11 +17,11 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+    public ErrorOr<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
     {
         if (_userRepository.GetUserByEmail(email) is not null)
         {
-            throw new Exception("User with given email already exists.");
+            return Errors.User.DuplicateEmail;
         }
 
         User user = new()
@@ -39,16 +41,16 @@ public class AuthenticationService : IAuthenticationService
             token);
     }
 
-    public AuthenticationResult Login(string email, string password)
+    public ErrorOr<AuthenticationResult> Login(string email, string password)
     {
         if (_userRepository.GetUserByEmail(email) is not User user)
         {
-            throw new Exception("User with given email does not exists.");
+            return Errors.Authentication.InvalidCredentials;
         }
 
         if (user.Password != password)
         {
-            throw new Exception("Invalid password.");
+            return Errors.Authentication.InvalidCredentials;
         }
 
         string token = _jwtTokenGenerator.GenerateToken(user);
