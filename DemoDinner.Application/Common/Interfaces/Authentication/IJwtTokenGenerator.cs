@@ -1,6 +1,8 @@
-﻿namespace DemoDinner.Application.Common.Interfaces.Authentication;
+﻿using DemoDinner.Domain.Entities;
+
+namespace DemoDinner.Application.Common.Interfaces.Authentication;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(Guid id, string firstName, string lastName);
+    string GenerateToken(User user);
 }

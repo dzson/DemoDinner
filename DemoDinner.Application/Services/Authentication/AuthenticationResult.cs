@@ -1,8 +1,7 @@
-﻿namespace DemoDinner.Application.Services.Authentication;
+﻿using DemoDinner.Domain.Entities;
+
+namespace DemoDinner.Application.Services.Authentication;
 
 public record AuthenticationResult(
-    Guid Id,
-    string FirstName,
-    string LastName,
-    string Email,
+    User User,
     string Token);

@@ -32,13 +32,10 @@ public class AuthenticationService : IAuthenticationService
 
         _userRepository.Add(user);
 
-        string token = _jwtTokenGenerator.GenerateToken(user.Id, firstName, lastName);
+        string token = _jwtTokenGenerator.GenerateToken(user);
 
         return new AuthenticationResult(
-            user.Id,
-            firstName,
-            lastName, 
-            email,
+            user,
             token);
     }
 
@@ -54,13 +51,10 @@ public class AuthenticationService : IAuthenticationService
             throw new Exception("Wrong email or password");
         }
 
-        string token = _jwtTokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName);
+        string token = _jwtTokenGenerator.GenerateToken(user);
 
         return new AuthenticationResult(
-            user.Id,
-            user.FirstName,
-            user.LastName, 
-            email,
+            user,
             token);
     }
 }
