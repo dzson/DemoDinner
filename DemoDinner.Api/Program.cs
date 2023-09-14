@@ -1,17 +1,13 @@
-using DemoDinner.Api.Common.Errors;
+using DemoDinner.Api;
 using DemoDinner.Application;
 using DemoDinner.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services
+        .AddPresentation()
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
-
-    builder.Services.AddControllers();
-
-    builder.Services.AddSingleton<ProblemDetailsFactory, DemoDinnerProblemDetailsFactory>();
 }
 
 var app = builder.Build();
