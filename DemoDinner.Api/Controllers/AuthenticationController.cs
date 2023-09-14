@@ -1,4 +1,6 @@
-﻿using DemoDinner.Application.Services.Authentication;
+﻿using DemoDinner.Application.Services.Authentication.Commands;
+using DemoDinner.Application.Services.Authentication.Common;
+using DemoDinner.Application.Services.Authentication.Queries;
 using DemoDinner.Contracts.Authentication;
 using DemoDinner.Domain.Common.Errors;
 using ErrorOr;
@@ -10,17 +12,21 @@ namespace DemoDinner.Api.Controllers;
 [ApiController]
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthenticationCommandService _authenticationCommandService;
+    private readonly IAuthenticationQueryService _authenticationQueryService;
 
-    public AuthenticationController(IAuthenticationService authenticationService)
+    public AuthenticationController(
+        IAuthenticationCommandService authenticationCommandService,
+        IAuthenticationQueryService authenticationQueryService)
     {
-        _authenticationService = authenticationService;
+        _authenticationCommandService = authenticationCommandService;
+        _authenticationQueryService = authenticationQueryService;
     }
 
     [HttpPost("register")]
     public IActionResult Register(RegisterRequest request)
     {
-        ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
+        ErrorOr<AuthenticationResult> authResult = _authenticationCommandService.Register(
             request.FirstName,
             request.LastName,
             request.Email,
@@ -34,7 +40,7 @@ public class AuthenticationController : ApiController
     [HttpPost("login")]
     public IActionResult Login(LoginRequest request)
     {
-        ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(
+        ErrorOr<AuthenticationResult> authResult = _authenticationQueryService.Login(
             request.Email,
             request.Password);
 
