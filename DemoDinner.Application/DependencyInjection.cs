@@ -1,6 +1,6 @@
-﻿using DemoDinner.Application.Services.Authentication.Commands;
-using DemoDinner.Application.Services.Authentication.Queries;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace DemoDinner.Application;
 
@@ -8,8 +8,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
-        services.AddScoped<IAuthenticationQueryService, AuthenticationQueryService>();
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         return services;
     }
 }
